@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import Navbar from "../../src/components/Navbar";
 import { Box, Text } from "@chakra-ui/react";
 import axios from "axios";
