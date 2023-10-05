@@ -8,7 +8,6 @@ import SquareOAuth from "../src/pages/SquareOAuth"; // Import your SquareOAuth c
 import Catalogue from "./pages/Catalogue";
 import Inventory from "./pages/Inventory";
 import Chat from "./pages/Chat";
-import { Wrapper } from "./components/Wrapper";
 
 // function Dashboard() {
 //   return (
@@ -30,11 +29,9 @@ function App() {
 
             <Route path="/dashboard" element={<Home />} />
 
-            <Route path="/" element={<Wrapper />}>
-              <Route path="/catalogue" element={<Catalogue />} />
-              <Route path="/inventory" element={<Inventory />} />
-              <Route path="/chat" element={<Chat />} />
-            </Route>
+            <Route path="/catalogue" element={<Catalogue />} />
+            <Route path="/inventory" element={<Inventory />} />
+            <Route path="/chat" element={<Chat />} />
           </Routes>
         </div>
       </ChakraProvider>
