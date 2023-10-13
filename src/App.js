@@ -6,8 +6,10 @@ import { AuthProvider } from "../src/context/authContext";
 
 import SquareOAuth from "../src/pages/SquareOAuth"; // Import your SquareOAuth component
 import Catalogue from "./pages/Catalogue";
+import IngredientForm from "./pages/IngredientForm";
 import Inventory from "./pages/Inventory";
 import Chat from "./pages/Chat";
+import RecommendMenu from "../src/pages/RecommendMenu";
 
 // function Dashboard() {
 //   return (
@@ -28,6 +30,8 @@ function App() {
             <Route path="/login" element={<SquareOAuth />} />
 
             <Route path="/dashboard" element={<Home />} />
+            <Route path="/ingredientform" element={<IngredientForm />} />
+            <Route path="/recommendmenu" element={<RecommendMenu />} />
 
             <Route path="/catalogue" element={<Catalogue />} />
             <Route path="/inventory" element={<Inventory />} />
