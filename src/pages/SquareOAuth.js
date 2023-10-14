@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Text } from "@chakra-ui/react";
+import { useAuth } from "../store/AuthContext";
 
 const SquareOAuth = () => {
   const [error, setError] = useState(null);
   const history = useNavigate();
+  const { sellerLogin } = useAuth();
 
   const CLIENT_ID = "sandbox-sq0idb-qqw1PDXOq16d403omj_1_g";
   const REDIRECT_URI = "http://localhost:3000/auth/v1/callback";
@@ -30,7 +32,7 @@ const SquareOAuth = () => {
       })
         .then((response) => response.json())
         .then((data) => {
-          history("/dashboard");
+          history("/");
         })
         .catch((error) => {
           setError(error.message);
@@ -65,7 +67,13 @@ const SquareOAuth = () => {
           Seller Website
         </Text>
         {error && <p>Error: {error}</p>}
-        <Button colorScheme="blue" onClick={handleLoginClick}>
+        <Button
+          colorScheme="blue"
+          onClick={() => {
+            sellerLogin();
+            history("/");
+          }}
+        >
           Login with Square
         </Button>
       </Box>
