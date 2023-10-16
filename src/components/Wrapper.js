@@ -22,15 +22,21 @@ import {
   Container,
 } from "@chakra-ui/react";
 import { FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
+import { GoCheck } from "react-icons/go";
 
 import { FaClipboardList } from "react-icons/fa";
-import { MdInventory } from "react-icons/md";
-import { BsFillChatLeftFill } from "react-icons/bs";
+import { BsFillChatLeftFill, BsFillLightningChargeFill } from "react-icons/bs";
 import { useAuth } from "../store/AuthContext";
+
 const LinkItems = [
-  { name: "Catalogue", icon: FaClipboardList, route: "/catalogue" },
-  { name: "Inventory", icon: MdInventory, route: "/inventory" },
+  { name: "Ingredients", icon: GoCheck, route: "/ingredients" },
+  { name: "Catalogs", icon: FaClipboardList, route: "/catalogs" },
   { name: "Chat", icon: BsFillChatLeftFill, route: "/chat" },
+  {
+    name: "Recommend Menu",
+    icon: BsFillLightningChargeFill,
+    route: "/recommend-menu",
+  },
 ];
 
 const SidebarContent = ({ onClose, ...rest }) => {
@@ -51,12 +57,10 @@ const SidebarContent = ({ onClose, ...rest }) => {
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link, _index) => (
-        <NavLink to={link.route} key={_index}>
-          <NavItem key={link.name} icon={link.icon}>
-            {link.name}
-          </NavItem>
-        </NavLink>
+      {LinkItems.map((link) => (
+        <NavItem key={link.name} icon={link.icon} to={link.route}>
+          {link.name}
+        </NavItem>
       ))}
     </Box>
   );
@@ -64,8 +68,8 @@ const SidebarContent = ({ onClose, ...rest }) => {
 
 const NavItem = ({ icon, children, ...rest }) => {
   return (
-    <Box
-      as="a"
+    <NavLink
+      to={rest.to}
       href="#"
       style={{ textDecoration: "none" }}
       _focus={{ boxShadow: "none" }}
@@ -95,7 +99,7 @@ const NavItem = ({ icon, children, ...rest }) => {
         )}
         {children}
       </Flex>
-    </Box>
+    </NavLink>
   );
 };
 
