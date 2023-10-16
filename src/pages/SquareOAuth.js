@@ -1,45 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Text } from "@chakra-ui/react";
+import { useAuth } from "../store/AuthContext";
 
 const SquareOAuth = () => {
   const [error, setError] = useState(null);
   const history = useNavigate();
+  const { sellerLogin } = useAuth();
 
-  const CLIENT_ID = "sandbox-sq0idb-qqw1PDXOq16d403omj_1_g";
-  const REDIRECT_URI = "http://localhost:3000/auth/v1/callback";
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get("code");
-
-    if (code) {
-      const requestData = {
-        client_id: CLIENT_ID,
-        code,
-        redirect_uri: REDIRECT_URI,
-        grant_type: "authorization_code",
-      };
-
-      fetch("https://connect.squareup.com/oauth2/token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          history("/dashboard");
-        })
-        .catch((error) => {
-          setError(error.message);
-        });
-    }
-  }, [history]);
+  const CLIENT_ID = process.env.REACT_APP_SQUARE_CLIENT_ID;
+  const REDIRECT_URI = process.env.REACT_APP_SQUARE_REDIRECT_URI;
+  const BASE_URL = process.env.REACT_APP_SQUARE_BASE_URL;
 
   const handleLoginClick = () => {
-    const authorizationUrl = `https://connect.squareup.com/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+    const authorizationUrl = `${BASE_URL}/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=ITEMS_READ ITEMS_WRITE INVENTORY_READ INVENTORY_WRITE ORDERS_READ ORDERS_WRITE PAYMENTS_READ PAYMENTS_WRITE INVOICES_READ INVOICES_WRITE`;
     window.location.href = authorizationUrl;
   };
 
@@ -65,7 +39,12 @@ const SquareOAuth = () => {
           Seller Website
         </Text>
         {error && <p>Error: {error}</p>}
-        <Button colorScheme="blue" onClick={handleLoginClick}>
+        <Button
+          colorScheme="blue"
+          onClick={() => {
+            handleLoginClick();
+          }}
+        >
           Login with Square
         </Button>
       </Box>

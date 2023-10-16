@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom"; // Import BrowserRouter
 import App from "./App";
 
-import { AuthProvider } from "./context/authContext.js"; // Correct import path
+import { AuthProvider } from "./store/AuthContext"; // Correct import path
 
 ReactDOM.render(
   <Router>
