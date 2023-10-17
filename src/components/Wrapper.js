@@ -21,21 +21,30 @@ import {
   MenuList,
   Container,
 } from "@chakra-ui/react";
-import { FiMenu, FiBell, FiChevronDown } from "react-icons/fi";
+import { FiMenu, FiChevronDown } from "react-icons/fi";
 import { GoCheck } from "react-icons/go";
 
 import { FaClipboardList } from "react-icons/fa";
-import { BsFillChatLeftFill, BsFillLightningChargeFill } from "react-icons/bs";
+import {
+  BsFillChatLeftFill,
+  BsFillLightningChargeFill,
+  BsFillCheckSquareFill,
+} from "react-icons/bs";
 import { useAuth } from "../store/AuthContext";
 
 const LinkItems = [
-  { name: "Ingredients", icon: GoCheck, route: "/ingredients" },
+  { name: "Ingredients", icon: GoCheck, route: "/" },
   { name: "Catalogs", icon: FaClipboardList, route: "/catalogs" },
   { name: "Chat", icon: BsFillChatLeftFill, route: "/chat" },
   {
     name: "Recommend Menu",
     icon: BsFillLightningChargeFill,
     route: "/recommend-menu",
+  },
+  {
+    name: "Square Dasboard",
+    icon: BsFillCheckSquareFill,
+    route: "https://squareupsandbox.com/dashboard/",
   },
 ];
 
@@ -53,7 +62,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="md" fontWeight="bold">
-          Project Name
+          Seller AI
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
@@ -104,7 +113,7 @@ const NavItem = ({ icon, children, ...rest }) => {
 };
 
 const MobileNav = ({ onOpen, ...rest }) => {
-  const { sellerLogout, sellerDetails } = useAuth();
+  const { sellerDetails } = useAuth();
   const navigate = useNavigate();
   return (
     <Flex
@@ -131,16 +140,10 @@ const MobileNav = ({ onOpen, ...rest }) => {
         fontSize="md"
         fontWeight="bold"
       >
-        Project Name
+        Seller AI
       </Text>
 
       <HStack spacing={{ base: "0", md: "6" }}>
-        <IconButton
-          size="lg"
-          variant="ghost"
-          aria-label="open menu"
-          icon={<FiBell />}
-        />
         <Flex alignItems={"center"}>
           <Menu>
             <MenuButton
@@ -181,7 +184,9 @@ const MobileNav = ({ onOpen, ...rest }) => {
               <MenuDivider />
               <MenuItem
                 onClick={() => {
-                  sellerLogout();
+                  localStorage.removeItem("square_hackathon_access_token");
+                  localStorage.removeItem("square_hackathon_seller_location");
+                  // sellerLogout();
                   navigate("/login");
                 }}
               >

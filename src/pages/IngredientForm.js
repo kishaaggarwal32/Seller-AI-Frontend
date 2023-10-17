@@ -32,12 +32,8 @@ function IngredientForm() {
       data.append("unit", ingredient.unit);
       data.append("unitprice", ingredient.unitprice);
 
-      const response = await backendAPIInstance.post(
-        "/seller/add_ingedients",
-        data
-      );
+      await backendAPIInstance.post("/seller/add_ingedients", data);
 
-      console.log("Ingredient Added:", response.data);
       toast({
         title: "Ingredient Added",
         description: "Ingredient Added Successfully.",

@@ -1,9 +1,5 @@
 import axios from "axios";
 
-export const axiosSqaureInstance = axios.create({
-  baseURL: "",
-});
-
 export const backendAPIInstance = axios.create({
   baseURL: process.env.REACT_APP_SELLER_API_BASE_URL,
   headers: {

@@ -1,6 +1,27 @@
 import React, { useEffect } from "react";
+import { backendAPIInstance } from "../constants/axios";
+import { useNavigate } from "react-router-dom";
 
 const SquareRedirect = () => {
+  const navigate = useNavigate();
+  const getSellerLocationCode = async (token) => {
+    const sellerDetails = await backendAPIInstance.post(
+      "/seller/get_seller_location",
+      {},
+      {
+        headers: {
+          "access-token": token,
+        },
+      }
+    );
+
+    localStorage.removeItem("square_hackathon_seller_location");
+    localStorage.setItem(
+      "square_hackathon_seller_location",
+      sellerDetails.data.location_id
+    );
+    navigate("/");
+  };
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
@@ -35,14 +56,18 @@ const SquareRedirect = () => {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("data -->", JSON.stringify(data));
-          localStorage.removeItem("square_hackathon_token");
-          localStorage.setItem("square_hackathon_token", JSON.stringify(data));
+          localStorage.removeItem("square_hackathon_access_token");
+          localStorage.setItem(
+            "square_hackathon_access_token",
+            data.access_token
+          );
+          getSellerLocationCode(data.access_token);
         })
         .catch((error) => {
           console.log("error in square redirect -->", error);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return <div>SquareRedirect</div>;
 };

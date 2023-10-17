@@ -23,14 +23,12 @@ const IngredientsList = () => {
   const navigate = useNavigate();
   const [ingredients, setIngredients] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const [summary, setSummary] = useState("ingredients summary");
+  const [summaryData, setSummaryData] = useState([]);
   const [isSummaryLoading, setIsSummaryLoading] = useState(false);
 
   const fetchIngredients = async () => {
     try {
       const response = await backendAPIInstance.post("/ingredients/read");
-      console.log(JSON.parse(response.data));
       setIngredients(JSON.parse(response.data));
     } catch (error) {
       console.log("error in fetching ingredients -->", error);
@@ -41,12 +39,10 @@ const IngredientsList = () => {
   }, []);
 
   const deleteIngredient = async (name) => {
-    console.log("name -->", name);
     try {
-      const response = await backendAPIInstance.post("/ingredients/delete", {
+      await backendAPIInstance.post("/ingredients/delete", {
         name: name,
       });
-      console.log("response -->", response.data);
     } catch (error) {
       console.log("error in delete ingredient -->", error);
     }
@@ -54,18 +50,20 @@ const IngredientsList = () => {
 
   const summarizeIngredients = async () => {
     setIsSummaryLoading(true);
-    console.log("summarize ingredients");
     try {
       const response = await backendAPIInstance.post(
         "/seller/get_ingredient_summary"
       );
-      console.log("response -->", response.data);
-      setSummary(JSON.stringify(response.data));
+
+      const arr = [];
+      for (const [key, value] of Object.entries(response.data)) {
+        arr.push({ type: key, ingredients: value });
+      }
       setIsSummaryLoading(false);
+      setSummaryData(arr);
       onOpen();
     } catch (error) {
       console.log("error -->", error);
-      setSummary("could not generate summary, please try again");
       setIsSummaryLoading(false);
       onOpen();
     }
@@ -132,7 +130,11 @@ const IngredientsList = () => {
           </Tbody>
         </ChakraTable>
       </TableContainer>
-      <SummaryModal isOpen={isOpen} onClose={onClose} summary={summary} />
+      <SummaryModal
+        isOpen={isOpen}
+        onClose={onClose}
+        summaryData={summaryData}
+      />
     </div>
   );
 };

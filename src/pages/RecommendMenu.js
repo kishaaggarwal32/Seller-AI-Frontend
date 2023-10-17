@@ -10,7 +10,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { backendAPIInstance } from "../constants/axios";
-import MyModal from "../components/Modal";
 
 const cuisines = [
   "Indian",
@@ -35,143 +34,8 @@ const time = [
   "1 hour",
 ];
 
-const tempDishes = [
-  {
-    category: "breakfast",
-    items: [
-      {
-        name: "tamagoyaki extra nori",
-        price: 6.5,
-      },
-      {
-        name: "tamagoyaki extra soy sauce",
-        price: 6.5,
-      },
-      {
-        name: "miso soup",
-        price: 5,
-      },
-      {
-        name: "onigiri salmon filling",
-        price: 7,
-      },
-      {
-        name: "onigiri umeboshi filling",
-        price: 7,
-      },
-    ],
-  },
-  {
-    category: "lunch",
-    items: [
-      {
-        name: "ramen extra noodles",
-        price: 12,
-      },
-      {
-        name: "ramen no green onions",
-        price: 12,
-      },
-      {
-        name: "sushi platter",
-        price: 15.5,
-      },
-      {
-        name: "tempura udon extra tempura",
-        price: 13,
-      },
-    ],
-  },
-  {
-    category: "dinner",
-    items: [
-      {
-        name: "yakitori extra skewers",
-        price: 14,
-      },
-      {
-        name: "yakitori less salt",
-        price: 14,
-      },
-      {
-        name: "sashimi platter",
-        price: 18.5,
-      },
-      {
-        name: "sukiyaki extra tofu",
-        price: 16,
-      },
-    ],
-  },
-  {
-    category: "dessert",
-    items: [
-      {
-        name: "mochi ice cream",
-        price: 5.5,
-      },
-      {
-        name: "matcha cheesecake",
-        price: 6,
-      },
-      {
-        name: "dorayaki",
-        price: 4.5,
-      },
-    ],
-  },
-  {
-    category: "drinks",
-    items: [
-      {
-        name: "green tea",
-        price: 2,
-      },
-      {
-        name: "sake",
-        price: 7.5,
-      },
-      {
-        name: "matcha latte",
-        price: 4,
-      },
-    ],
-  },
-  {
-    category: "sides",
-    items: [
-      {
-        name: "edamame",
-        price: 3,
-      },
-      {
-        name: "gyoza",
-        price: 5,
-      },
-      {
-        name: "takoyaki",
-        price: 6,
-      },
-    ],
-  },
-  {
-    category: "breads",
-    items: [
-      {
-        name: "melon pan",
-        price: 2.5,
-      },
-      {
-        name: "anpan",
-        price: 2,
-      },
-      {
-        name: "yakisoba pan",
-        price: 3,
-      },
-    ],
-  },
-];
+const token = localStorage.getItem("square_hackathon_access_token");
+
 const RecommendMenu = () => {
   const [formData, setFormData] = useState({
     preferred_cuisine: cuisines[0],
@@ -183,7 +47,7 @@ const RecommendMenu = () => {
     cook_time_dinner: time[5],
   });
 
-  const [dishes, setDishes] = useState(tempDishes);
+  const [dishes, setDishes] = useState([]);
 
   const [isMenuGenerateLoading, setIsMenuGenerateLoading] = useState(false);
 
@@ -206,7 +70,6 @@ const RecommendMenu = () => {
         data
       );
 
-      console.log("response -->", response.data);
       const dishesToShow = [];
       for (const [key, value] of Object.entries(response.data)) {
         const arr = [];
@@ -228,9 +91,8 @@ const RecommendMenu = () => {
       }
       setIsMenuGenerateLoading(false);
       setDishes(dishesToShow);
-
-      console.log("dishesToShow -->", dishesToShow);
     } catch (error) {
+      setIsMenuGenerateLoading(false);
       if (error.response) {
         // Handle validation errors or other HTTP errors
         console.error("Error fetching recommended menu: ", error.response.data);
@@ -256,14 +118,10 @@ const RecommendMenu = () => {
         data
       );
 
-      console.log("respons in reengineer -->", response.data);
-      // const updatedDish = response.data;
-
       const updatedDish = [...dishes];
       updatedDish[catIndex].items[itemIndex].name = response.data.dish;
       updatedDish[catIndex].items[itemIndex].price = response.data.price;
 
-      console.log("updatedDish -->", updatedDish);
       setDishes(updatedDish);
       toast({
         title: "Re Engineer.",
@@ -288,7 +146,7 @@ const RecommendMenu = () => {
   };
 
   const addToCatalog = async (name, price) => {
-    const res = await backendAPIInstance.post(
+    await backendAPIInstance.post(
       "/catalog/create",
       {
         name: name,
@@ -296,13 +154,11 @@ const RecommendMenu = () => {
       },
       {
         headers: {
-          "access-token":
-            "EAAAEBg6wBSg6FOgpKQXsceHjsOeYnRDHDy9Ce8lWE4rZdRvAAU56n8ayoiBMwxs",
+          "access-token": token,
         },
       }
     );
 
-    console.log("res in add to catalog -->", res.data);
     toast({
       title: "Add To Catalog.",
       description: "Dish added to catalog successfully.",

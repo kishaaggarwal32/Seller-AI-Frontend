@@ -5,11 +5,10 @@ export const initialState = {
 };
 
 const authReducer = (state, action) => {
-  const { type, payload } = action;
+  const { type } = action;
 
   switch (type) {
     case actions.SELLER_LOGIN:
-      console.log("payload in login -->", payload);
       return {
         ...state,
         sellerDetails: { name: "Abcd Efgh", city: "Montreal" },
@@ -17,7 +16,6 @@ const authReducer = (state, action) => {
       };
 
     case actions.SELLER_LOGOUT:
-      console.log("payload in logout -->", payload);
       return { ...state, sellerDetails: {}, isSellerLoggedIn: false };
 
     default:

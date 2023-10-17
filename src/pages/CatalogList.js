@@ -14,6 +14,7 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { BsFillLightningChargeFill } from "react-icons/bs";
+const token = localStorage.getItem("square_hackathon_access_token");
 
 const CatalogList = () => {
   const [catalogs, setCatalogs] = useState([]);
@@ -29,13 +30,10 @@ const CatalogList = () => {
         {},
         {
           headers: {
-            "access-token":
-              "EAAAEBg6wBSg6FOgpKQXsceHjsOeYnRDHDy9Ce8lWE4rZdRvAAU56n8ayoiBMwxs",
+            "access-token": token,
           },
         }
       );
-      console.log(response.data.objects);
-
       setCatalogs(response.data.objects);
     } catch (error) {
       console.log("error in fetching catalogues -->", error);
@@ -55,7 +53,6 @@ const CatalogList = () => {
           dish_name: dishName,
         }
       );
-      console.log("response -->", response.data);
       setIsGenerateImageLoading(false);
       setIsGenerateImageLoadingIndex(-1);
       const newCatalogs = [...catalogs];
